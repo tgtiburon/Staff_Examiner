@@ -1,7 +1,9 @@
 // to hide credentials
 require("dotenv").config();
+//const mysql = require("mysql2/promise");
 const mysql = require("mysql2");
 // connect to db
+// const db = await mysql.createConnection(
 const db = mysql.createConnection(
 
     {
