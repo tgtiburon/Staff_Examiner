@@ -1,6 +1,6 @@
 # Staff_Examiner
 
-![](./Capture.PNG)
+
 
 Video of app in action:
 (https://2u-20.wistia.com/medias/2lnle7xnpk)
@@ -48,19 +48,19 @@ THEN I am prompted to select an employee to update and their new role and this i
 ## Getting Started:
 
 
-- [ ] MySQL2 package to connect to my MySQL database and perform queries
+- [x] MySQL2 package to connect to my MySQL database and perform queries
 
-- [ ] Inquirer package to interact with user via command line
+- [x] Inquirer package to interact with user via command line
 
-- [ ] Console.table.package to print the MySQL rows to the console.
+- [x] Console.table.package to print the MySQL rows to the console.
 
-- [ ] Use dotenv to hide credentials
+- [x] Use dotenv to hide credentials
 
 - [ ] Make queries asynchronous.  MySQL2 exposes a .promise() function on Connections to upgrade an existing non-promise connection to use Promises.
 
 - [ ] Read this for help with async MySQL2  https://www.npmjs.com/package/mysql2
 
-- [ ] Schema
+- [x] Schema
 
             department
                 id: INT PRIMARY KEY
@@ -83,7 +83,7 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 - [ ] Constructor function or class could help organize these.
 
-- [ ] Include seeds.sql to pre-populate the db
+- [x] Include seeds.sql to pre-populate the db
 
 - [ ] BONUS: add the following:
             Update employee managers
