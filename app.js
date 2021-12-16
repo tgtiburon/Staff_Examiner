@@ -3,6 +3,8 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 //const mysql = require('mysql2');
 
+//inquirer = new inquirer.ui.BottomBar();
+
 
 
 
@@ -88,6 +90,17 @@ const mainMenu = () => {
 
 const viewAllDepartments = () => {
     console.log("Inside viewAllDepartments");
+
+
+    const sql = `SELECT * FROM staff.departments`;
+
+    db.query(sql, (err, rows) => {
+        if(err) {
+            console.log(err);
+        }
+        console.log("\n");
+        console.table(rows);
+    });
     mainMenu();
 
 }
