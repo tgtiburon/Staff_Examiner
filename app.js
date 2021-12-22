@@ -155,10 +155,18 @@ const viewAllEmployees = () => {
                         role.title,
                         department.name,
                         role.salary,
-                        CONCAT(employee.first_name, " ", employee.last_name) AS manager FROM employee 
+                        CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employee 
                         INNER JOIN role ON employee.role_id = role.id
                         INNER JOIN department ON role.department_id = department.id
                         LEFT JOIN employee manager ON employee.manager_id = manager.id;`;
+  
+
+  
+    
+    let q = db.query(sql, function(err,results) {
+        console.log(results);
+    });
+    console.log(q.sql);
 
     db.promise().query(sql)
         .then(([ rows ])=> {
@@ -215,22 +223,26 @@ const addADepartment = () => {
    });
  
 
-}
+}// 
 
 const addARole = () => {
 
-//SELECT * FROM roles; SELECT * FROM departments
-    const sql = `SELECT * FROM role`;
+
+    const sql = `SELECT * FROM department`;
     db.promise().query(sql)
         .then(( [ rows ]) => {
-           // console.log("Below is rows");
-           // console.log(rows);
-           // console.table(rows);
-           console.log("rows");
-           console.log(rows);
-           const tmpRoles = rows.roleTitle;
-           console.table(tmpRoles);
+          
+           const tmpDepartments = rows;
+           console.table(tmpDepartments);
+           deptChoices = tmpDepartments.map(({id, name})=> ({
+              
+              name: name,  value: id
+           }))
+
+           console.log(deptChoices);
+          
            console.log("in db.promise");
+        
 
            inquirer.prompt([
             {
@@ -260,13 +272,13 @@ const addARole = () => {
                         return false;
                     }
                 }   
-            }
-            // {
-            //     type: "list",
-            //     name: "roleDeptID",
-            //     message: "What is the department id of the role you want to add?",
-            //    choices : tmpRoles
-            //    }   
+            },
+            { 
+                 type: "list",
+                 name: "roleDeptID",
+                 message: "What is the department id of the role you want to add?",
+                 choices : deptChoices
+            }   
             
      
         ])
@@ -294,74 +306,79 @@ const addARole = () => {
 
         .catch(err=> {
             console.log(err);
-        });
-
-
-
-   
+        }); 
 }
 
 const addAnEmployee = () => {
+    const sql = `SELECT * FROM department`;
+    db.promise().query(sql)
+        .then(( [ rows ]) => {
+         
+           const tmpDepartments = rows;
+          // console.table(tmpDepartments);
+           deptChoices = tmpDepartments.map(({id, name})=> ({
+              
+              name: name,  value: id
+           }))
 
-    inquirer.prompt([
-        {
-           type: "input",
-           name: "employeeFName",
-           message: "What is the first name of the employee?",
-           validate: employeeFName => {
-               if(employeeFName){
-                  
-                   return true;
-               }else {
-                   console.log("Please enter the first name of the employee.");
-                   return false;
-               }
-           }
-        },
-        {
-            type: "input",
-            name: "employeeLName",
-            message: "What is the last name of the employee?",
-            validate: employeeLName => {
-                if(employeeLName){
-                 
-                    return true;
-                }else {
-                    console.log("Please enter the last name of the employee.");
-                    return false;
+           console.log(deptChoices);
+          
+           console.log("in db.promise");
+           
+            inquirer.prompt([
+                {
+                type: "input",
+                name: "employeeFName",
+                message: "What is the first name of the employee?",
+                validate: employeeFName => {
+                    if(employeeFName){
+                        
+                        return true;
+                    }else {
+                        console.log("Please enter the first name of the employee.");
+                        return false;
+                    }
                 }
-            }   
-        },
-        {
-            type: "input",
-            name: "employeeRoleID",
-            message: "What is the department id of the employee?",
-            validate: employeeRoleID => {
-                if(employeeRoleID){
-                   
-                    return true;
-                }else {
-                    console.log("Please enter the department id of the employee? ");
-                    return false;
+                },
+                {
+                    type: "input",
+                    name: "employeeLName",
+                    message: "What is the last name of the employee?",
+                    validate: employeeLName => {
+                        if(employeeLName){
+                        
+                            return true;
+                        }else {
+                            console.log("Please enter the last name of the employee.");
+                            return false;
+                        }
+                    }   
+                },
+                {
+                     
+                        type: "list",
+                        name: "roleDeptID",
+                        message: "What is the department id of the role you want to add?",
+                        choices : deptChoices
+                      
+                },
+                {// TODO: ADD view of managers
+                    type: "input",
+                    name: "employeeManagerID",
+                    message: "What is the manager id of the employee?",
+                    validate: employeeManagerID => {
+                        if(employeeManagerID){
+                        
+                            return true;
+                        }else {
+                            console.log("Please enter the manager id of the employee? ");
+                            return false;
+                        }
+                    }   
                 }
-            }   
-        },
-        {
-            type: "input",
-            name: "employeeManagerID",
-            message: "What is the manager id of the employee?",
-            validate: employeeManagerID => {
-                if(employeeManagerID){
-                   
-                    return true;
-                }else {
-                    console.log("Please enter the manager id of the employee? ");
-                    return false;
-                }
-            }   
-        }
- 
-    ])
+    
+            ])
+        })
     .then(answers => {
         console.log("New employee: ", answers);
         const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
