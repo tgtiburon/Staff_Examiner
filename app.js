@@ -153,13 +153,13 @@ const viewAllEmployees = () => {
                         employee.first_name,
                         employee.last_name,
                         role.title,
-                        department.name,
+                        department.name AS department,
                         role.salary,
                         CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employee 
                         INNER JOIN role ON employee.role_id = role.id
                         INNER JOIN department ON role.department_id = department.id
-                        LEFT JOIN employee manager ON employee.manager_id = manager.id;`;
-  
+                        LEFT JOIN employee manager ON employee.manager_id = manager.id
+                        ORDER BY employee.id;`;
 
   
     
@@ -218,10 +218,7 @@ const addADepartment = () => {
         .catch(err => {
             console.log(err);
         });
-
-
    });
- 
 
 }// 
 
@@ -233,16 +230,11 @@ const addARole = () => {
         .then(( [ rows ]) => {
           
            const tmpDepartments = rows;
-           console.table(tmpDepartments);
+        
            deptChoices = tmpDepartments.map(({id, name})=> ({
               
               name: name,  value: id
            }))
-
-           console.log(deptChoices);
-          
-           console.log("in db.promise");
-        
 
            inquirer.prompt([
             {
@@ -310,94 +302,114 @@ const addARole = () => {
 }
 
 const addAnEmployee = () => {
-    const sql = `SELECT * FROM department`;
-    db.promise().query(sql)
-        .then(( [ rows ]) => {
-         
-           const tmpDepartments = rows;
-          // console.table(tmpDepartments);
-           deptChoices = tmpDepartments.map(({id, name})=> ({
-              
-              name: name,  value: id
-           }))
 
-           console.log(deptChoices);
-          
-           console.log("in db.promise");
-           
-            inquirer.prompt([
-                {
-                type: "input",
-                name: "employeeFName",
-                message: "What is the first name of the employee?",
-                validate: employeeFName => {
-                    if(employeeFName){
-                        
-                        return true;
-                    }else {
-                        console.log("Please enter the first name of the employee.");
-                        return false;
-                    }
-                }
-                },
-                {
-                    type: "input",
-                    name: "employeeLName",
-                    message: "What is the last name of the employee?",
-                    validate: employeeLName => {
-                        if(employeeLName){
-                        
-                            return true;
-                        }else {
-                            console.log("Please enter the last name of the employee.");
-                            return false;
+
+
+    // old stuff below
+    // CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employee 
+
+        const sql = `SELECT * FROM role`;
+        db.promise().query(sql)
+            .then(( [ rows ]) => {
+               
+
+                // TODO: beginning
+            console.log(rows);
+
+            // Array of objects should contain objects with 2 key's name and value
+            // Where name is what is displayed and value is what is selected
+            let roleChoices = rows.map(({id, title, salary, department_id })=> ({
+                name: title ,
+                value: id
+            }));
+            console.log(roleChoices);
+//new 
+            const sql2 = `SELECT * FROM employee`
+            db.promise().query(sql2)
+                .then(([ rows2]) => {
+
+                    let employeeChoices = rows2.map(({id, first_name, last_name, role_id, manager_id })=> ({
+                        name: last_name ,
+                        value: id
+                    }));
+
+              //  })// end of second promise
+
+                inquirer.prompt([
+                    {
+                        type: "input",
+                        name: "employeeFName",
+                        message: "What is the first name of the employee?",
+                        validate: employeeFName => {
+                            if(employeeFName){
+                                
+                                return true;
+                            }else {
+                                console.log("Please enter the first name of the employee.");
+                                return false;
+                            }
                         }
-                    }   
-                },
-                {
-                     
+                    },
+                    {
+                        type: "input",
+                        name: "employeeLName",
+                        message: "What is the last name of the employee?",
+                        validate: employeeLName => {
+                            if(employeeLName){
+                            
+                                return true;
+                            }else {
+                                console.log("Please enter the last name of the employee.");
+                                return false;
+                            }
+                        }   
+                    },
+                    {
+                        
+                            type: "list",
+                            name: "roleDeptID",
+                            message: "What is the department id of the role you want to add?",
+                            choices : roleChoices
+                        
+                    },
+                    {// TODO: ADD view of managers
                         type: "list",
-                        name: "roleDeptID",
-                        message: "What is the department id of the role you want to add?",
-                        choices : deptChoices
-                      
-                },
-                {// TODO: ADD view of managers
-                    type: "input",
-                    name: "employeeManagerID",
-                    message: "What is the manager id of the employee?",
-                    validate: employeeManagerID => {
-                        if(employeeManagerID){
-                        
-                            return true;
-                        }else {
-                            console.log("Please enter the manager id of the employee? ");
-                            return false;
-                        }
-                    }   
-                }
-    
-            ])
-        })
-    .then(answers => {
-        console.log("New employee: ", answers);
-        const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
-         const params = [answers.employeeFName, answers.employeeLName, answers.employeeRoleID, answers.employeeManagerID];
-         db.promise().query(sql,params)
-         .then(([ rows ])=> {
-             console.log('\x1b[92m-----------------------\x1b[0m');
-             console.log('Add a Role')
-             console.log('\n');
-             console.table(rows);
-             console.log('\x1b[92m-----------------------\x1b[0m');
-             mainMenu();
-         })
-         .catch(err => {
-             console.log(err);
-         });
+                        name: "employeeManagerID",
+                        message: "What is the manager id of the employee?",
+                        choices: employeeChoices
+                    }
+        
+                ])
 
-    });
-   
+                // TODO:  end 
+            .then(answers => {
+                console.log("New employee: ", answers);
+                const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
+                const params = [answers.employeeFName, answers.employeeLName, answers.roleDeptID, answers.employeeManagerID];
+                db.promise().query(sql,params)
+                .then(([ rows ])=> {
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('Add a Role')
+                    console.log('\n');
+                    console.table(rows);
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+
+            })
+        })// end of second promise
+            .catch(err => {
+                console.log(err);
+            });
+            
+    
+
+        })
+
+        // old stuff above
 
 }
 
