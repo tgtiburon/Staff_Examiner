@@ -220,7 +220,7 @@ const addADepartment = () => {
         });
    });
 
-}// 
+}
 
 const addARole = () => {
 
@@ -304,16 +304,11 @@ const addARole = () => {
 const addAnEmployee = () => {
 
 
-
-    // old stuff below
-    // CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employee 
-
         const sql = `SELECT * FROM role`;
         db.promise().query(sql)
             .then(( [ rows ]) => {
                
-
-                // TODO: beginning
+       
             console.log(rows);
 
             // Array of objects should contain objects with 2 key's name and value
@@ -323,17 +318,15 @@ const addAnEmployee = () => {
                 value: id
             }));
             console.log(roleChoices);
-//new 
+
             const sql2 = `SELECT * FROM employee`
             db.promise().query(sql2)
                 .then(([ rows2]) => {
 
                     let employeeChoices = rows2.map(({id, first_name, last_name, role_id, manager_id })=> ({
-                        name: last_name ,
+                        name: first_name + " " + last_name,
                         value: id
                     }));
-
-              //  })// end of second promise
 
                 inquirer.prompt([
                     {
@@ -372,7 +365,7 @@ const addAnEmployee = () => {
                             choices : roleChoices
                         
                     },
-                    {// TODO: ADD view of managers
+                    {
                         type: "list",
                         name: "employeeManagerID",
                         message: "What is the manager id of the employee?",
@@ -381,7 +374,6 @@ const addAnEmployee = () => {
         
                 ])
 
-                // TODO:  end 
             .then(answers => {
                 console.log("New employee: ", answers);
                 const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
@@ -399,18 +391,13 @@ const addAnEmployee = () => {
                     console.log(err);
                 });
 
-            })
+            })//end of then
         })// end of second promise
             .catch(err => {
                 console.log(err);
             });
             
-    
-
-        })
-
-        // old stuff above
-
+        })//end of first promise
 }
 
 const updateAnEmployeeRole = () => {
