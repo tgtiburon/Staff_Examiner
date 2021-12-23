@@ -1,14 +1,6 @@
 const db = require('./db/connection');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-//const mysql = require('mysql2');
-
-//inquirer = new inquirer.ui.BottomBar();
-
-
-
-
-
 
 
 const init = () => {
@@ -23,12 +15,6 @@ const init = () => {
         }
     })
 
-   
-        // db.query("SELECT employee.first_name, employee.last_name, role.title AS Title FROM employee JOIN role ON employee.role_id = role.id;", 
-        // function(err,res) {
-        //     if(err) throw err;
-        //     console.table(res);
-        // })
         console.log('\x1b[32m\x1b[1m--------------------------------------------------------');
         console.log("|            \x1b[37mWelcome to Staff Examiner!                \x1b[32m|");
         console.log("|                                                      |");
@@ -36,10 +22,6 @@ const init = () => {
         console.log("--------------------------------------------------------\x1b[37m");
         console.log("\n");
         
-        // I don't think I need this
-
-      
-
         mainMenu();
        
 }
@@ -103,7 +85,8 @@ const mainMenu = () => {
 
 const viewAllDepartments = () => {
    
-    const sql = `SELECT * FROM staff.department`;
+    const sql = `SELECT * FROM staff.department
+                ORDER BY name ASC`;
 
     db.promise().query(sql)
         .then(([ rows ])=> {
@@ -121,7 +104,7 @@ const viewAllDepartments = () => {
 };
 
 const viewAllRoles = () => {
-   // const sql = `SELECT * FROM staff.role`;
+
    const sql = `SELECT role.id,
                        role.title,
                        department.name AS department, 
@@ -163,11 +146,9 @@ const viewAllEmployees = () => {
 
   
     
-    let q = db.query(sql, function(err,results) {
-        console.log(results);
-    });
-    console.log(q.sql);
-
+    // let q = db.query(sql, function(err,results) {
+    //    // console.log(results);
+    // });
     db.promise().query(sql)
         .then(([ rows ])=> {
             console.log('\x1b[92m-----------------------\x1b[0m');
@@ -189,7 +170,7 @@ const addADepartment = () => {
        {
           type: "input",
           name: "deptName",
-          message: "What is the name of the department you want to add?",
+          message: "What is the name of the department?",
           validate: deptName => {
               if(deptName){
                   console.log("Name received.");
@@ -203,7 +184,7 @@ const addADepartment = () => {
 
    )
    .then(deptName => {
-       console.log("New dept name = ", deptName);
+     
        const sql = `INSERT INTO department (name) VALUES (?)`;
         const params = [deptName.deptName];
         db.promise().query(sql,params)
@@ -225,7 +206,8 @@ const addADepartment = () => {
 const addARole = () => {
 
 
-    const sql = `SELECT * FROM department`;
+    const sql = `SELECT * FROM department
+                ORDER BY name ASC`;
     db.promise().query(sql)
         .then(( [ rows ]) => {
           
@@ -240,13 +222,13 @@ const addARole = () => {
             {
                type: "input",
                name: "roleTitle",
-               message: "What is the title of the role you want to add?",
+               message: "What is the name of the role?",
                validate: roleTitle => {
                    if(roleTitle){
-                       console.log("Role received.");
+            
                        return true;
                    }else {
-                       console.log("Please enter a role  title.");
+                       console.log("Please enter a role name.");
                        return false;
                    }
                }
@@ -254,13 +236,13 @@ const addARole = () => {
             {
                 type: "input",
                 name: "roleSalary",
-                message: "What is the salary of the role you want to add?",
+                message: "What is the salary of the role?",
                 validate: roleSalary => {
                     if(roleSalary){
-                        console.log("Role received.");
+                       // console.log("Role received.");
                         return true;
                     }else {
-                        console.log("Please enter a department name.");
+                        console.log("Please enter a salary for the role.");
                         return false;
                     }
                 }   
@@ -268,14 +250,14 @@ const addARole = () => {
             { 
                  type: "list",
                  name: "roleDeptID",
-                 message: "What is the department id of the role you want to add?",
+                 message: "Which department does the role belong to?",
                  choices : deptChoices
             }   
             
      
         ])
         .then(answers => {
-            console.log("New role: ", answers);
+           // console.log("New role: ", answers);
             const sql = `INSERT INTO role (title, salary, department_id) VALUES (?,?,?)`;
              const params = [answers.roleTitle, answers.roleSalary, answers.roleDeptID];
              db.promise().query(sql,params)
@@ -294,11 +276,10 @@ const addARole = () => {
         });
 
 
-        })
-
-        .catch(err=> {
+    })
+    .catch(err=> {
             console.log(err);
-        }); 
+    }); 
 }
 
 const addAnEmployee = () => {
@@ -308,9 +289,6 @@ const addAnEmployee = () => {
         db.promise().query(sql)
             .then(( [ rows ]) => {
                
-       
-            console.log(rows);
-
             // Array of objects should contain objects with 2 key's name and value
             // Where name is what is displayed and value is what is selected
             let roleChoices = rows.map(({id, title, salary, department_id })=> ({
@@ -332,7 +310,7 @@ const addAnEmployee = () => {
                     {
                         type: "input",
                         name: "employeeFName",
-                        message: "What is the first name of the employee?",
+                        message: "What is the employee's first name?",
                         validate: employeeFName => {
                             if(employeeFName){
                                 
@@ -346,7 +324,7 @@ const addAnEmployee = () => {
                     {
                         type: "input",
                         name: "employeeLName",
-                        message: "What is the last name of the employee?",
+                        message: "What is the employee's last name?",
                         validate: employeeLName => {
                             if(employeeLName){
                             
@@ -375,7 +353,7 @@ const addAnEmployee = () => {
                 ])
 
             .then(answers => {
-                console.log("New employee: ", answers);
+               // console.log("New employee: ", answers);
                 const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
                 const params = [answers.employeeFName, answers.employeeLName, answers.roleDeptID, answers.employeeManagerID];
                 db.promise().query(sql,params)
@@ -401,6 +379,80 @@ const addAnEmployee = () => {
 }
 
 const updateAnEmployeeRole = () => {
+  
+    const sql = `SELECT * FROM employee`;
+    db.promise().query(sql)
+        .then(( [ rows ]) => {
+            let employeeChoices = rows.map(({id, first_name, last_name, role_id, manager_id })=> ({
+                name: first_name + " " + last_name,
+                value: id
+            }));
+
+            console.log("Below is employeeChoices:");
+            console.log(employeeChoices);
+            
+
+        const sql2 = `SELECT * FROM role`
+        db.promise().query(sql2)
+            .then(([ rows2]) => {
+
+          
+        // Array of objects should contain objects with 2 key's name and value
+        // Where name is what is displayed and value is what is selected
+        let roleChoices = rows2.map(({id, title, salary, department_id })=> ({
+            name: title ,
+            value: id
+        }));
+        console.log("Below is roleChoices:");
+        console.log(roleChoices);
+      
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "employeeID",
+                    message: "Which employee's role do you want to update?",
+                    choices: employeeChoices
+                    
+                },
+                {
+                    type: "list",
+                    name: "roleDeptID",
+                    message: "which role do you want to assign the selected employee to?",
+                    choices : roleChoices
+                   
+                },
+             
+            ])
+
+        .then(answers => {
+        
+            console.log("answers below:")
+            console.log(answers);
+       
+            const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+            const params = [answers.roleDeptID, answers.employeeID];
+            db.promise().query(sql,params)
+            .then(([ rows ])=> {
+                console.log('\x1b[92m-----------------------\x1b[0m');
+                console.log('Add a Role')
+                console.log('\n');
+                console.table(rows);
+                console.log('\x1b[92m-----------------------\x1b[0m');
+                mainMenu();
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        })//end of then
+    })// end of second promise
+        .catch(err => {
+            console.log(err);
+        });
+        
+    })//end of first promise
+
+
 
     
    
