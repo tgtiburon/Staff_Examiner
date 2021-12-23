@@ -715,78 +715,209 @@ const viewEmployeesByDepartment = () => {
 }
 const deleteDepartment = () => {
 
-    // const sql = `SELECT * from department`;
+    const sql = `SELECT * from department`;
 
-    // db.promise().query(sql)
-    //     .then(( [ rows ]) => {
-    //         let departmentChoices = rows.map(({id, name  })=> ({
-    //             name: name,
-    //             value: id
-    //         }));
+    db.promise().query(sql)
+        .then(( [ rows ]) => {
+            let departmentChoices = rows.map(({id, name  })=> ({
+                name: name,
+                value: id
+            }));
 
-    //         console.log("first rows");
-    //         console.log(rows);
-    //         console.table(rows);
+            console.log("first rows");
+            console.log(rows);
+            console.table(rows);
           
-    //         inquirer.prompt([
+            inquirer.prompt([
               
-    //             {
-    //                 type: "list",
-    //                 name: "departmentID",
-    //                 message: "which department do you want to delete?",
-    //                 choices : departmentChoices
+                {
+                    type: "list",
+                    name: "departmentID",
+                    message: "which department do you want to delete?",
+                    choices : departmentChoices
                    
-    //             }
-    //         ])
-    //     .then(answers => {
-    //         console.log('department choice: ', answers);
+                }
+            ])
+        .then(answers => {
+            console.log('department choice: ', answers);
       
-    //        const sql = `DELETE FROM department 
-    //                      WHERE role.department_id  = ?;`;
+           const sql = `DELETE FROM department 
+                         WHERE id  = ?;`;
 
-    //         const params = [answers.departmentID];
-    //         console.log(answers);
-    //         db.promise().query(sql,params)
-    //         .then(([ rows ])=> {
+            const params = [answers.departmentID];
+            console.log(answers);
+            db.promise().query(sql,params)
+            .then(([ rows ])=> {
              
-    //             if (rows.length === 0 ) {
+                if (rows.length === 0 ) {
           
-    //                 console.log('\x1b[92m-----------------------\x1b[0m');
-    //                 console.log('Department failed to delete.')
-    //                 console.log('\x1b[92m-----------------------\x1b[0m');
-    //                 console.log("No employees are in this department right now.")
-    //                 console.log('\x1b[92m-----------------------\x1b[0m');
-    //                 mainMenu();
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('Department failed to delete.')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log("No employees are in this department right now.")
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
 
-    //             } else {
+                } else {
    
-    //                 console.log('\x1b[92m-----------------------\x1b[0m');
-    //                 console.log('Department deleted successfully.')
-    //                 console.log('\x1b[92m-----------------------\x1b[0m');
-    //                 console.table(rows);
-    //                 console.log('\x1b[92m-----------------------\x1b[0m');
-    //                 mainMenu();
-    //             }
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         });
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('Department deleted successfully.')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.table(rows);
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
 
-    //     })//end of then
-    //     .catch(err => {
-    //         console.log(err);
-    //     });
+        })//end of then
+        .catch(err => {
+            console.log(err);
+        });
         
-    // })//end of first promise
+    })//end of first promise
     
 }
 const deleteRole = () => {
+
+    const sql = `SELECT * from role`;
+
+    db.promise().query(sql)
+        .then(( [ rows ]) => {
+            let roleChoices = rows.map(({id, title  })=> ({
+                name: title,
+                value: id
+            }));
+
+            console.log("first rows");
+            console.log(rows);
+            console.table(rows);
+          
+            inquirer.prompt([
+              
+                {
+                    type: "list",
+                    name: "roleID",
+                    message: "Which role do you want to delete?",
+                    choices : roleChoices
+                   
+                }
+            ])
+        .then(answers => {
+            console.log('role choice: ', answers);
+      
+           const sql = `DELETE FROM role 
+                         WHERE id  = ?;`;
+
+            const params = [answers.roleID];
+            console.log(answers);
+            db.promise().query(sql,params)
+            .then(([ rows ])=> {
+             
+                if (rows.length === 0 ) {
+          
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('Role failed to delete.')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log("No employees are in this department right now.")
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+
+                } else {
+   
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('Role deleted successfully.')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.table(rows);
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        })//end of then
+        .catch(err => {
+            console.log(err);
+        });
+        
+    })//end of first promise
     
 }
 const deleteEmployee = () => {
+
+    const sql = `SELECT * from employee`;
+// name: first_name + " " + last_name ,
+    db.promise().query(sql)
+        .then(( [ rows ]) => {
+            let employeeChoices = rows.map(({id, first_name, last_name, role_id, manager_id })=> ({
+                name: first_name + " " + last_name,
+                value: id
+            }));
+
+            console.log("first rows");
+            console.log(rows);
+            console.table(rows);
+          
+            inquirer.prompt([
+              
+                {
+                    type: "list",
+                    name: "employeeID",
+                    message: "Which employee do you want to delete?",
+                    choices : employeeChoices
+                   
+                }
+            ])
+        .then(answers => {
+            console.log('employee choice: ', answers);
+      
+           const sql = `DELETE FROM employee 
+                         WHERE id  = ?;`;
+
+            const params = [answers.employeeID];
+            console.log(answers);
+            db.promise().query(sql,params)
+            .then(([ rows ])=> {
+             
+                if (rows.length === 0 ) {
+          
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('Employee failed to delete.')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log("No employees are in this department right now.")
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+
+                } else {
+   
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('Employee deleted successfully.')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.table(rows);
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        })//end of then
+        .catch(err => {
+            console.log(err);
+        });
+        
+    })//end of first promise
     
 }
 const viewTotalBudgetByDepartment = () => {
+
+    //TODO: Will do if I have extra time
+    
     
 }
 
