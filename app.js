@@ -25,7 +25,7 @@ const init = () => {
         mainMenu();
        
 }
-
+// TODO:   FILL OUT MORE MENU OPTIONS FOR BONUS POINTS
 const mainMenu = () => {
     inquirer    
         .prompt(
@@ -35,9 +35,12 @@ const mainMenu = () => {
                 message: "Please pick from the following menu.",
                 choices: ["View all departments", "View all roles", "View all employees", 
                             "Add a department", "Add a role", "Add an employee", 
-                        "Update an employee role", new inquirer.Separator('\x1b[92m-----------------------\x1b[0m'), "Quit",
+                        "Update an employee role","Update an employee manager", "View employees by manager",
+                        "View employees by department", "Delete department", "Delete role", "Delete employee", 
+                        "View total budget by department", 
+                        new inquirer.Separator('\x1b[92m-----------------------\x1b[0m'), "Quit",
                         new inquirer.Separator('\x1b[92m-----------------------\x1b[0m')],
-                default: "View all departments"
+                default: "Update an employee manager"
             }
            
         )
@@ -73,6 +76,35 @@ const mainMenu = () => {
                 case "Update an employee role":
                     updateAnEmployeeRole();
                     break;
+            // TODO: BONUS FUNCTIONS
+                case "Update an employee manager":
+                    updateAnEmployeeManager();
+                    break;
+
+                case "View employees by manager":
+                    viewEmployeesByManager();
+                    break;
+
+                case "View employees by department":
+                    viewEmployeesByDepartment();
+                    break;
+
+                case "Delete department":
+                    deleteDepartment();
+                    break;
+
+                case "Delete role":
+                    deleteRole();
+                    break;
+
+                case "Delete employee":
+                    deleteEmployee();
+                    break;
+
+                case "View total budget by department":
+                    viewTotalBudgetByDepartment();
+                    break;
+                
             
                 case "Quit": // Quit
                 console.log("Thank you for using Staff Examiner!");
@@ -451,13 +483,103 @@ const updateAnEmployeeRole = () => {
         });
         
     })//end of first promise
+}
 
+const updateAnEmployeeManager = () => {
+  
+    const sql = `SELECT * FROM employee`;
+    db.promise().query(sql)
+        .then(( [ rows ]) => {
+            let employeeChoices = rows.map(({id, first_name, last_name, role_id, manager_id })=> ({
+                name: first_name + " " + last_name,
+                value: id
+            }));
 
+          //  console.log("Below is employeeChoices:");
+         //   console.log(employeeChoices);
+            
 
+        const sql2 = `SELECT * FROM employee WHERE manager_id IS NULL`;
+        //params = [''];
     
-   
+        db.promise().query(sql2)
+            .then(([ rows2]) => {
+
+          
+        // Array of objects should contain objects with 2 key's name and value
+        // Where name is what is displayed and value is what is selected
+        let managerChoices = rows2.map(({id, first_name, last_name, role_id })=> ({
+            name: first_name + " " + last_name ,
+            value: id
+        }));
+       // console.log("Below is managerChoices:");
+       // console.log(managerChoices);
+      
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "employeeID",
+                    message: "Which employee's manager do you want to update?",
+                    choices: employeeChoices
+                    
+                },
+                {
+                    type: "list",
+                    name: "managerID",
+                    message: "which manager do you want to assign the selected employee to?",
+                    choices : managerChoices
+                   
+                },
+             
+            ])
+
+        .then(answers => {
+        
+            console.log("answers below:")
+            console.log(answers);
+       
+            const sql = `UPDATE employee SET manager_id = ? WHERE id = ?`;
+            const params = [answers.managerID, answers.employeeID];
+            db.promise().query(sql,params)
+            .then(([ rows ])=> {
+                console.log('\x1b[92m-----------------------\x1b[0m');
+                console.log('Add a Role')
+                console.log('\n');
+                console.table(rows);
+                console.log('\x1b[92m-----------------------\x1b[0m');
+                mainMenu();
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        })//end of then
+    })// end of second promise
+        .catch(err => {
+            console.log(err);
+        });
+        
+    })//end of first promise
+}
 
 
+const viewEmployeesByManager = () => {
+    
+}
+const viewEmployeesByDepartment = () => {
+    
+}
+const deleteDepartment = () => {
+    
+}
+const deleteRole = () => {
+    
+}
+const deleteEmployee = () => {
+    
+}
+const viewTotalBudgetByDepartment = () => {
+    
 }
 
 
