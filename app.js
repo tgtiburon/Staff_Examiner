@@ -124,7 +124,9 @@ const viewAllDepartments = () => {
         .then(([ rows ])=> {
             console.log('\x1b[92m-----------------------\x1b[0m');
             console.log('All Departments')
-            console.log('\n');
+            console.log('\x1b[92m-----------------------\x1b[0m');
+
+          //  console.log('\n');
             console.table(rows);
             console.log('\x1b[92m-----------------------\x1b[0m');
             mainMenu();
@@ -149,7 +151,9 @@ const viewAllRoles = () => {
         .then(([ rows ])=> {
             console.log('\x1b[92m-----------------------\x1b[0m');
             console.log('All Roles')
-            console.log('\n');
+            console.log('\x1b[92m-----------------------\x1b[0m');
+
+         //   console.log('\n');
             console.table(rows);
             console.log('\x1b[92m-----------------------\x1b[0m');
             mainMenu();
@@ -176,16 +180,14 @@ const viewAllEmployees = () => {
                         LEFT JOIN employee manager ON employee.manager_id = manager.id
                         ORDER BY employee.id;`;
 
-  
-    
-    // let q = db.query(sql, function(err,results) {
-    //    // console.log(results);
-    // });
+ 
     db.promise().query(sql)
         .then(([ rows ])=> {
             console.log('\x1b[92m-----------------------\x1b[0m');
             console.log('All Employees')
-            console.log('\n');
+            console.log('\x1b[92m-----------------------\x1b[0m');
+
+          //  console.log('\n');
             console.table(rows);
             console.log('\x1b[92m-----------------------\x1b[0m');
             mainMenu();
@@ -223,7 +225,9 @@ const addADepartment = () => {
         .then(([ rows ])=> {
             console.log('\x1b[92m-----------------------\x1b[0m');
             console.log('Add a Department')
-            console.log('\n');
+           // console.log('\n');
+           console.log('\x1b[92m-----------------------\x1b[0m');
+
             console.table(rows);
             console.log('\x1b[92m-----------------------\x1b[0m');
             mainMenu();
@@ -271,7 +275,6 @@ const addARole = () => {
                 message: "What is the salary of the role?",
                 validate: roleSalary => {
                     if(roleSalary){
-                       // console.log("Role received.");
                         return true;
                     }else {
                         console.log("Please enter a salary for the role.");
@@ -289,14 +292,16 @@ const addARole = () => {
      
         ])
         .then(answers => {
-           // console.log("New role: ", answers);
+        
             const sql = `INSERT INTO role (title, salary, department_id) VALUES (?,?,?)`;
              const params = [answers.roleTitle, answers.roleSalary, answers.roleDeptID];
              db.promise().query(sql,params)
              .then(([ rows ])=> {
                  console.log('\x1b[92m-----------------------\x1b[0m');
                  console.log('Add a Role')
-                 console.log('\n');
+                console.log('\x1b[92m-----------------------\x1b[0m');
+
+                // console.log('\n');
                  console.table(rows);
                  console.log('\x1b[92m-----------------------\x1b[0m');
                  mainMenu();
@@ -385,14 +390,16 @@ const addAnEmployee = () => {
                 ])
 
             .then(answers => {
-               // console.log("New employee: ", answers);
+            
                 const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
                 const params = [answers.employeeFName, answers.employeeLName, answers.roleDeptID, answers.employeeManagerID];
                 db.promise().query(sql,params)
                 .then(([ rows ])=> {
                     console.log('\x1b[92m-----------------------\x1b[0m');
-                    console.log('Add a Role')
-                    console.log('\n');
+                    console.log('Added the new employee')
+                console.log('\x1b[92m-----------------------\x1b[0m');
+
+                    //console.log('\n');
                     console.table(rows);
                     console.log('\x1b[92m-----------------------\x1b[0m');
                     mainMenu();
@@ -420,15 +427,10 @@ const updateAnEmployeeRole = () => {
                 value: id
             }));
 
-            console.log("Below is employeeChoices:");
-            console.log(employeeChoices);
-            
-
         const sql2 = `SELECT * FROM role`
         db.promise().query(sql2)
             .then(([ rows2]) => {
-
-          
+  
         // Array of objects should contain objects with 2 key's name and value
         // Where name is what is displayed and value is what is selected
         let roleChoices = rows2.map(({id, title, salary, department_id })=> ({
@@ -466,8 +468,10 @@ const updateAnEmployeeRole = () => {
             db.promise().query(sql,params)
             .then(([ rows ])=> {
                 console.log('\x1b[92m-----------------------\x1b[0m');
-                console.log('Add a Role')
-                console.log('\n');
+                console.log('Updated the employee role.')
+                console.log('\x1b[92m-----------------------\x1b[0m');
+
+                //console.log('\n');
                 console.table(rows);
                 console.log('\x1b[92m-----------------------\x1b[0m');
                 mainMenu();
@@ -495,26 +499,19 @@ const updateAnEmployeeManager = () => {
                 value: id
             }));
 
-          //  console.log("Below is employeeChoices:");
-         //   console.log(employeeChoices);
-            
-
+  
         const sql2 = `SELECT * FROM employee WHERE manager_id IS NULL`;
-        //params = [''];
-    
+     
         db.promise().query(sql2)
             .then(([ rows2]) => {
-
-          
+ 
         // Array of objects should contain objects with 2 key's name and value
         // Where name is what is displayed and value is what is selected
         let managerChoices = rows2.map(({id, first_name, last_name, role_id })=> ({
             name: first_name + " " + last_name ,
             value: id
         }));
-       // console.log("Below is managerChoices:");
-       // console.log(managerChoices);
-      
+     
             inquirer.prompt([
                 {
                     type: "list",
@@ -543,8 +540,9 @@ const updateAnEmployeeManager = () => {
             db.promise().query(sql,params)
             .then(([ rows ])=> {
                 console.log('\x1b[92m-----------------------\x1b[0m');
-                console.log('Add a Role')
-                console.log('\n');
+                console.log('Employee assigned to new manager.')
+                console.log('\x1b[92m-----------------------\x1b[0m');
+               // console.log('\n');
                 console.table(rows);
                 console.log('\x1b[92m-----------------------\x1b[0m');
                 mainMenu();
@@ -564,12 +562,222 @@ const updateAnEmployeeManager = () => {
 
 
 const viewEmployeesByManager = () => {
+
+    const sql = `SELECT * FROM employee`;
+    db.promise().query(sql)
+        .then(( [ rows ]) => {
+            let employeeChoices = rows.map(({id, first_name, last_name, role_id, manager_id })=> ({
+                name: first_name + " " + last_name,
+                value: id
+            }));
+
+        const sql2 = `SELECT * FROM employee WHERE manager_id IS NULL`;
+    
+        db.promise().query(sql2)
+            .then(([ rows2]) => {
+   
+        // Array of objects should contain objects with 2 key's name and value
+        // Where name is what is displayed and value is what is selected
+        let managerChoices = rows2.map(({id, first_name, last_name, role_id })=> ({
+            name: first_name + " " + last_name ,
+            value: id
+        }));
+      
+            inquirer.prompt([
+              
+                {
+                    type: "list",
+                    name: "managerID",
+                    message: "which manager's employees do you want to see?",
+                    choices : managerChoices
+                   
+                }
+             
+            ])
+
+        .then(answers => {
+      
+            const sql = `SELECT first_name AS First, last_name AS Last FROM employee WHERE manager_id = ?`;
+
+            const params = [answers.managerID];
+            db.promise().query(sql,params)
+            .then(([ rows ])=> {
+             
+                if (rows.length === 0 ) {
+          
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('View by manager')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log("No employees report to this manager right now.")
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+
+                } else {
+   
+                console.log('\x1b[92m-----------------------\x1b[0m');
+                console.log('View by manager')
+                console.log('\x1b[92m-----------------------\x1b[0m');
+                console.table(rows);
+                console.log('\x1b[92m-----------------------\x1b[0m');
+                mainMenu();
+
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        })//end of then
+    })// end of second promise
+        .catch(err => {
+            console.log(err);
+        });
+        
+    })//end of first promise
+
+     
     
 }
 const viewEmployeesByDepartment = () => {
+  
+    const sql = `SELECT * from department`;
+
+    db.promise().query(sql)
+        .then(( [ rows ]) => {
+            let departmentChoices = rows.map(({id, name  })=> ({
+                name: name,
+                value: id
+            }));
+
+            console.log("first rows");
+            console.log(rows);
+            console.table(rows);
+          
+            inquirer.prompt([
+              
+                {
+                    type: "list",
+                    name: "departmentID",
+                    message: "which department's employees do you want to see?",
+                    choices : departmentChoices
+                   
+                }
+             
+            ])
+
+        .then(answers => {
+            console.log('department choice: ', answers);
+      
+           const sql = `SELECT employee.id,
+                employee.first_name,
+                employee.last_name,
+                department.name AS department
+                FROM employee 
+                LEFT JOIN role ON employee.role_id = role.id
+                LEFT JOIN department ON role.department_id = department.id 
+                WHERE role.department_id  = ?;`;
+
+            const params = [answers.departmentID];
+            console.log(answers);
+            db.promise().query(sql,params)
+            .then(([ rows ])=> {
+             
+                if (rows.length === 0 ) {
+          
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('View by department')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log("No employees are in this department right now.")
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+
+                } else {
+   
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.log('View by by department')
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    console.table(rows);
+                    console.log('\x1b[92m-----------------------\x1b[0m');
+                    mainMenu();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        })//end of then
+        .catch(err => {
+            console.log(err);
+        });
+        
+    })//end of first promise
     
 }
 const deleteDepartment = () => {
+
+    // const sql = `SELECT * from department`;
+
+    // db.promise().query(sql)
+    //     .then(( [ rows ]) => {
+    //         let departmentChoices = rows.map(({id, name  })=> ({
+    //             name: name,
+    //             value: id
+    //         }));
+
+    //         console.log("first rows");
+    //         console.log(rows);
+    //         console.table(rows);
+          
+    //         inquirer.prompt([
+              
+    //             {
+    //                 type: "list",
+    //                 name: "departmentID",
+    //                 message: "which department do you want to delete?",
+    //                 choices : departmentChoices
+                   
+    //             }
+    //         ])
+    //     .then(answers => {
+    //         console.log('department choice: ', answers);
+      
+    //        const sql = `DELETE FROM department 
+    //                      WHERE role.department_id  = ?;`;
+
+    //         const params = [answers.departmentID];
+    //         console.log(answers);
+    //         db.promise().query(sql,params)
+    //         .then(([ rows ])=> {
+             
+    //             if (rows.length === 0 ) {
+          
+    //                 console.log('\x1b[92m-----------------------\x1b[0m');
+    //                 console.log('Department failed to delete.')
+    //                 console.log('\x1b[92m-----------------------\x1b[0m');
+    //                 console.log("No employees are in this department right now.")
+    //                 console.log('\x1b[92m-----------------------\x1b[0m');
+    //                 mainMenu();
+
+    //             } else {
+   
+    //                 console.log('\x1b[92m-----------------------\x1b[0m');
+    //                 console.log('Department deleted successfully.')
+    //                 console.log('\x1b[92m-----------------------\x1b[0m');
+    //                 console.table(rows);
+    //                 console.log('\x1b[92m-----------------------\x1b[0m');
+    //                 mainMenu();
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //         });
+
+    //     })//end of then
+    //     .catch(err => {
+    //         console.log(err);
+    //     });
+        
+    // })//end of first promise
     
 }
 const deleteRole = () => {
