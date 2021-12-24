@@ -39,7 +39,7 @@ THEN I am prompted to enter the name, salary, and department for the role and th
 THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 
 
-- [ ] WHEN I choose to update an employee role
+- [x] WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 
 
@@ -56,9 +56,9 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 - [x] Use dotenv to hide credentials
 
-- [ ] Make queries asynchronous.  MySQL2 exposes a .promise() function on Connections to upgrade an existing non-promise connection to use Promises.
+- [x] Make queries asynchronous.  MySQL2 exposes a .promise() function on Connections to upgrade an existing non-promise connection to use Promises.
 
-- [ ] Read this for help with async MySQL2  https://www.npmjs.com/package/mysql2
+- [x] Read this for help with async MySQL2  https://www.npmjs.com/package/mysql2
 
 - [x] Schema
 
@@ -85,7 +85,7 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 - [x] Include seeds.sql to pre-populate the db
 
-- [ ] BONUS: add the following:
+- [x] BONUS: add the following:
             Update employee managers
             View employees by manager
             View employees by department
@@ -97,10 +97,10 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ## Grading Requirements
 
-- [ ] This Challenge is graded based on the following criteria:
+- [x] This Challenge is graded based on the following criteria:
 
 ## Deliverables: 10%
-- [ ]   Github repo containing code.
+- [x]   Github repo containing code.
 
 
 ## Video Walkthrough: 27%
@@ -114,46 +114,46 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 
 ## Technical Acceptance Criteria: 40%
-- [ ] Uses inquirer
+- [x] Uses inquirer
 
-- [ ] Uses MySQL2 package to connect to MySQL database
+- [x] Uses MySQL2 package to connect to MySQL database
 
-- [ ] Uses the console.table.package to print MySQL rows to the console
+- [x] Uses the console.table.package to print MySQL rows to the console
 
-- [ ] Follows the following Schema 
+- [x] Follows the following Schema 
 
-![](./12-sql-homework-demo-01.png)
+![](./images/12-sql-homework-demo-01.png)
 
 
 
 ## Application Quality: 10%
-- [ ] Application console is free of errors.
+- [x] Application console is free of errors.
 
-- [ ] The application user experience is intuitive and easy to navigate.
+- [x] The application user experience is intuitive and easy to navigate.
 
 ## Repository Quality: 13%
-- [ ] Repository has a unique name.
+- [x] Repository has a unique name.
 
-- [ ] Repository follows best practices for file structure and naming conventions.
+- [x] Repository follows best practices for file structure and naming conventions.
 
-- [ ] Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
+- [x] Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
 
-- [ ] Repository contains multiple descriptive commit messages.
+- [x] Repository contains multiple descriptive commit messages.
 
-- [ ] Repository contains quality README file with description, screenshot, and link to deployed application.
+- [x] Repository contains quality README file with description, screenshot, and link to deployed application.
 
 ## Bonus: +10 Points
-- [ ] Fulfilling any of the following can add up to 20 points to your grade. Note that the highest grade you can get is still 100:
-- [ ] Update employee managers (2pts)
-- [ ] View employees by managers (2pts)
-- [ ] View employees by department (2pts)
-- [ ] Delete departments, roles, employees (2pts each)
-- [ ] View a departments total salary requirement (8pts)
+- [x] Fulfilling any of the following can add up to 20 points to your grade. Note that the highest grade you can get is still 100:
+- [x] Update employee managers (2pts)
+- [x] View employees by managers (2pts)
+- [x] View employees by department (2pts)
+- [x] Delete departments, roles, employees (2pts each)
+- [x] View a departments total salary requirement (8pts)
 
 
 ## How to Submit the Challenge
-- [ ] You are required to submit BOTH of the following for review:
+- [x] You are required to submit BOTH of the following for review:
 
-- [ ] A walkthrough video demonstrating the functionality of the application.
+- [x] A walkthrough video demonstrating the functionality of the application.
 
-- [ ] The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
+- [x] The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
