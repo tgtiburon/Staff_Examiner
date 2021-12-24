@@ -46,7 +46,7 @@ This project allows a small company to use a MySQL Database to keep track of the
   ![](./assets/images/staff_examiner.PNG)
 
   ![](prompt.PNG)
-  [Here is a link to a video showing me using Staff Examiner to manipulate the Staff Database](https://drive.google.com/file/d/1Ioo038Y2-HMVUMeJm_OD1cpGjHMahOiE/view?usp=sharing)
+  [Here is a link to a video showing me using Staff Examiner to manipulate the Staff Database](https://drive.google.com/file/d/)
   
   
 
