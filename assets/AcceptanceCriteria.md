@@ -79,9 +79,6 @@ THEN I am prompted to select an employee to update and their new role and this i
                 role_id: INT to hold reference to employee role
                 manager_id: INT to hold reference to another employee that is the manager of the current employee (null if the employee has no manager)
 
-- [ ] Separate file that contains functions for performing specific SQL queries 
-
-- [ ] Constructor function or class could help organize these.
 
 - [x] Include seeds.sql to pre-populate the db
 
@@ -104,13 +101,13 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 
 ## Video Walkthrough: 27%
-- [ ] Submitted and link in the readme
+- [x] Submitted and link in the readme
 
-- [ ] Must show all technical acceptance being met
+- [x] Must show all technical acceptance being met
 
-- [ ] How the user invokes the application from command line
+- [x] How the user invokes the application from command line
 
-- [ ] Shows functional menu with options outlined in the acceptance criteria
+- [x] Shows functional menu with options outlined in the acceptance criteria
 
 
 ## Technical Acceptance Criteria: 40%
